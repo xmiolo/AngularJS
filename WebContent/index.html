@@ -1,0 +1,101 @@
+<html ng-app="listaTelefonica">
+<head>
+	<title> Lista Telefonica</title>
+	<link rel="stylesheet" type="text/css" href="/libs/bootstrap/css/bootstrap.css">
+	<style>
+		.jumbotron {
+			width: 400px;
+			text-align: center;
+			margin-top: 20px;
+			margin-left: auto;
+			margin-right: auto;
+		}
+		.table {
+			margin-top: 20px;
+		}
+		.form-control {
+			margin-bottom: 5px;
+		}
+		.selecionado {
+			background-color: blue;
+		}
+		.negrito {
+			font-style: bold;
+		}
+	</style>
+	<script src="/libs/angular.js"></script>
+	<script>
+		angular.module("listaTelefonica", []);
+		angular.module("listaTelefonica").controller("listaTelefonicaController", function($scope, $http) {
+			$scope.app = "Lista de Users";
+			
+			$scope.users = [];
+			$scope.operadoras = [
+				{nome: "Oi", codigo: 14, categoria: "Celular"},
+				{nome: "Vivo", codigo: 15, categoria: "Celular"},
+				{nome: "Claro", codigo: 41, categoria: "Celular"},
+				{nome: "Tim", codigo: 25, categoria: "Celular"},
+				{nome: "GVT", codigo: 102, categoria: "Fixo"},
+				{nome: "Embratel", codigo: 521, categoria: "Fixo"}
+			];
+			$scope.adicionarUser = function(user){
+				$scope.users.push(user);
+				delete $scope.user;
+			};
+			$scope.apagarUsers = function(users){
+				$scope.users = users.filter(function(user){
+					if(!user.selecionado) return user;
+				});
+				
+			};
+			$scope.isUserSelecionado = function(users){
+				return users.some(function(user){
+					return user.selecionado;
+				});
+			};
+			var carregarUsers = function(){
+				$http.get("http://localhost:8080/PersonalPage/personal/user").success(function(data,status){
+					$scope.users = data;
+				})
+			};
+			$scope.msg = "Ignorar o form que está abaixo, foi apenas testes...";
+			carregarUsers();
+		});
+		
+	</script>
+</head>
+<body ng-controller="listaTelefonicaController">
+	<div class="jumbotron">
+
+		<h3>{{app}}</h3>
+	
+		<table ng-show="users.length > 0" class="table table-striped">
+			<tr>
+				<th></th>
+				<th>Name</th>
+				<th>Password</th>
+				
+				<th></th>
+			</tr>
+			<tr ng-class="{'selecionado negrito': user.selecionado}" ng-repeat="user in users">
+				<td><input type="checkbox" ng-model="user.selecionado"/></td>
+				<td>{{user.name}}</td>
+				<td>{{user.password}}</td>
+				
+				<td><div style="width: 10px; height:10px;" ng-style="{'background-color': user.cor}"></div></td>
+			</tr>
+		</table>
+		<hr/>
+		{{msg}}
+		<input class="form-control" type="text" ng-model="user.nome" placeholder="Nome"/>
+		<input class="form-control" type="text" ng-model="user.telefone" placeholder="Telefone"/>
+		<select class="form-control" ng-model="user.operadora" ng-options="operadora.nome group by operadora.categoria for operadora in operadoras">
+			<option value="">Selecione uma operadora</option>
+		</select>
+		<button class="btn btn-primary btn-block" ng-disabled="!user.nome || !user.telefone" ng-click="adicionarUser(user)">Adicionar Users</button>
+		<button class="btn btn-danger btn-block" ng-if="false" ng-click="apagarUsers(users)">Apagar Users</button>	
+	</div>
+	<div ng-include="'footer.html'"></div>
+	
+</body>
+</html>
