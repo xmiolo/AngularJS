@@ -1,0 +1,142 @@
+<html ng-app="listaTelefonica">
+<head>
+	<title> Lista Telefonica</title>
+	<link rel="stylesheet" type="text/css" href="libs/bootstrap/css/bootstrap.css">
+	<style>
+		body {
+	        padding-top: 70px;
+	        /* Required padding for .navbar-fixed-top. Remove if using .navbar-static-top. Change if height of navigation changes. */
+	    }
+		.jumbotron {
+			width: 400px;
+			text-align: center;
+			margin-top: 20px;
+			margin-left: auto;
+			margin-right: auto;
+		}
+		.table {
+			margin-top: 20px;
+			margin-left: auto;
+			margin-right: auto;
+		}
+		.form-control {
+			margin-bottom: 5px;
+		}
+		.selecionado {
+			background-color: blue;
+		}
+		.negrito {
+			font-style: bold;
+		}
+	</style>
+	<script src="libs/angular.js"></script>
+	<script>
+		angular.module("listaTelefonica", []);
+		angular.module("listaTelefonica").controller("listaTelefonicaController", function($scope, $http) {
+			$scope.app = "Lista de Users";
+			
+			$scope.users = [];
+			$scope.operadoras = [
+				{nome: "Oi", codigo: 14, categoria: "Celular"},
+				{nome: "Vivo", codigo: 15, categoria: "Celular"},
+				{nome: "Claro", codigo: 41, categoria: "Celular"},
+				{nome: "Tim", codigo: 25, categoria: "Celular"},
+				{nome: "GVT", codigo: 102, categoria: "Fixo"},
+				{nome: "Embratel", codigo: 521, categoria: "Fixo"}
+			];
+			$scope.adicionarUser = function(user){
+				$scope.users.push(user);
+				delete $scope.user;
+			};
+			$scope.apagarUsers = function(users){
+				$scope.users = users.filter(function(user){
+					if(!user.selecionado) return user;
+				});
+				
+			};
+			$scope.isUserSelecionado = function(users){
+				return users.some(function(user){
+					return user.selecionado;
+				});
+			};
+			var carregarUsers = function(){
+				$http.get("http://localhost:8080/PersonalPage/personal/user").success(function(data,status){
+					$scope.users = data;
+				})
+			};
+			carregarUsers();
+		});
+		
+	</script>
+</head>
+<body ng-controller="listaTelefonicaController">
+
+	<nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+        <div class="container">
+            <!-- Brand and toggle get grouped for better mobile display -->
+            <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="#">Inicio</a>
+            </div>
+            
+
+		
+		<!-- Collect the nav links, forms, and other content for toggling -->
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                <ul class="nav navbar-nav">
+                    <li>
+                        <a href="#">Sobre</a>
+                    </li>
+                    <li>
+                        <a href="#">Menu ...</a>
+                    </li>
+                    <li>
+                        <a href="#">Contato</a>
+                    </li>
+                </ul>
+            </div>
+            <!-- /.navbar-collapse -->
+        </div>
+        <!-- /.container -->
+    </nav>
+	<h3>{{app}}</h3>
+	<div class="box-content">
+		<table ng-show="users.length > 0" class="table table-bordered table-striped table-condensed">
+			<thead>
+			<tr>
+				<th></th>
+				<th>Name</th>
+				<th>Password</th>
+				
+				<th></th>
+			</tr>
+			</thead>
+			<tbody>
+			<tr ng-class="{'selecionado negrito': user.selecionado}" ng-repeat="user in users">
+				<td><input type="checkbox" ng-model="user.selecionado"/></td>
+				<td>{{user.name}}</td>
+				<td>{{user.password}}</td>
+				
+				<td><div style="width: 10px; height:10px;" ng-style="{'background-color': user.cor}"></div></td>
+			</tr>
+			</tbody>
+		</table>
+	</div>
+		<hr/>
+		<!-- <input class="form-control" type="text" ng-model="user.nome" placeholder="Nome"/>
+		<input class="form-control" type="text" ng-model="user.telefone" placeholder="Telefone"/>
+		<select class="form-control" ng-model="user.operadora" ng-options="operadora.nome group by operadora.categoria for operadora in operadoras">
+			<option value="">Selecione uma operadora</option>
+		</select>
+		<button class="btn btn-primary btn-block" ng-disabled="!user.nome || !user.telefone" ng-click="adicionarUser(user)">Adicionar Users</button>
+		<button class="btn btn-danger btn-block" ng-if="false" ng-click="apagarUsers(users)">Apagar Users</button>	 -->
+	</div>
+	<div ng-include="'footer.html'"></div>
+	
+</body>
+</html>
