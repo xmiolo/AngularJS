@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html ng-app="uploadFiles">
+<head>
+<meta charset="UTF-8">
+<title>Smart Box</title>
+
+<link rel="stylesheet" href="libs/css/reset.css">
+<link rel="stylesheet prefetch"	href="http://fonts.googleapis.com/css?family=Roboto:400,100,300,500,700,900|RobotoDraft:400,100,300,500,700,900">
+<link rel="stylesheet prefetch"	href="http://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+<link rel="stylesheet" href="libs/css/style.css">
+
+<script src="libs/angular.js"></script>
+<script src="libs/angular-md5.js"></script>
+<script src="js/appUpload.js"></script>
+<script src="js/controllers/uploadController.js"></script>
+	
+</head>
+
+<body ng-controller="uploadController">
+	<input id="myfiles" fileread="uploadme.src" multiple type="file" ng-change="fazerPost()">
+	{{uploadme.src}}
+</body>
+</html>

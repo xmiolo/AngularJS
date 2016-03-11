@@ -11,10 +11,8 @@ angular.module("cloudLogin").controller(
 						})
 			};
 			consultaWSLogin();
-			
 			$scope.redirect = function(){
-				$window.location.href="C:/Users/Gregori/git/AngularJS/WebContent/restrict/welcome.html";
-				
+				$location.url("/restrict/welcome.html");
 			};
 			
 			$scope.fazerPost = function(Lusr, LpassEncr) {
@@ -25,7 +23,8 @@ angular.module("cloudLogin").controller(
 							"pass" : md5.createHash(LpassEncr)
 						})).success(function(data, status, headers, config) {
 					//Quando da SUcess no Login
-					$scope.redirect();
+							alert($scope.url());
+							/*$scope.redirect();*/
 				}).error(function(data, status, headers, config) {
 					console.log("NAO LOGOU");
 				});
