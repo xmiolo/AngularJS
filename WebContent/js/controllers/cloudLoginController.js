@@ -11,10 +11,10 @@ angular.module("cloudLogin").controller(
 						})
 			};
 			consultaWSLogin();
-			$scope.redirect = function(){
+			$scope.redirect = function() {
 				$location.url("/restrict/welcome.html");
 			};
-			
+
 			$scope.fazerPost = function(Lusr, LpassEncr) {
 				console.log("entrei");
 				$http.post("http://localhost:8080/Cloud/service/auth/post",
@@ -22,14 +22,14 @@ angular.module("cloudLogin").controller(
 							"mail" : Lusr,
 							"pass" : md5.createHash(LpassEncr)
 						})).success(function(data, status, headers, config) {
-					//Quando da SUcess no Login
-							alert($scope.url());
-							/*$scope.redirect();*/
+					// Quando da SUcess no Login
+					alert($scope.url());
+					/* $scope.redirect(); */
 				}).error(function(data, status, headers, config) {
 					console.log("NAO LOGOU");
 				});
 			}
-			
+
 			$scope.createNewUser = function(newUser) {
 				console.log("entrei");
 				$http.post("http://localhost:8080/Cloud/service/user/new",

@@ -1,11 +1,24 @@
-angular.module("uploadFiles").controller("uploadController", function($scope) {
+angular.module("uploadFiles").controller("uploadController", function($scope,$http) {
 	/*
 	 * var fileInput = document.getElementById("myfiles"); var files =
 	 * fileInput.files; // cache files.length var fl=files.length; ;
 	 * 
 	 */
-	$scope.uploadme = {};
-	$scope.uploadme.src = "";
+	function uploadFileToUrl(file) {
+        var fd = new FormData();
+        fd.append('file', file);
+        $http.post("http://localhost:8080/Cloud/service/repo/upload", fd, {
+            transformRequest: angular.identity,
+            headers: {'Content-Type': undefined}
+        })
+        .success(function(){
+        	//MENSAGEM DE SUCESSO
+        })
+        .error(function(){
+        	//MENSAGEM DE FAIL
+        });
+    }
+	
 	$scope.fazerPost = function() {
 		$scope.fileT = document.getElementById("myfiles");
 		
@@ -13,9 +26,8 @@ angular.module("uploadFiles").controller("uploadController", function($scope) {
 		var fl = $scope.file.length;
 		var i = 0
 		while (i < fl) {
-			// localize file var in the loop
-			$scope.filePrint = $scope.file[i];
-			alert($scope.filePrint.name);
+			//Envia um arquivo por vez pra ser gravado
+			uploadFileToUrl($scope.file[i]);
 			i++;
 		}
 	}

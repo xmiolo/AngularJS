@@ -1,1 +1,1 @@
-angular.module("uploadFiles", ["angular-md5"]);
+angular.module("uploadFiles", ["ngRoute"]);
