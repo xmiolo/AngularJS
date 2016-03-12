@@ -15,9 +15,11 @@
 <script src="js/controllers/uploadController.js"></script>
 	
 </head>
-
-<body ng-controller="uploadController">
-	<input id="myfiles" fileread="uploadme.src" multiple type="file" ng-change="fazerPost()">
-	{{uploadme.src}}
+<form ng-controller="uploadController">
+<body >
+	<input id="myfiles"  multiple type="file" ng-change="fazerPost()" ng-model="$scope.fileT">
+	<button type="button" ng-click="fazerPost()"> VAI </button>
+	{{$scope.fileT}}
 </body>
+</form>
 </html>
